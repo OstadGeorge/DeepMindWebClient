@@ -11,11 +11,19 @@ var recordBtn = document.getElementById('record');
 
 recordBtn.addEventListener("click", handleRecording);
 
+var maxAudioLen = 2 * 60 * 1000;
+var clicked = false;
+
 function handleRecording() {
     if (recordBtn.classList.contains('btn-danger')) {
         stopRecording()
     } else {
         startRecording();
+        setTimeout(function() {
+            if(!clicked) {
+                recordBtn.click();
+            }
+        }, maxAudioLen);
     }
 }
 
