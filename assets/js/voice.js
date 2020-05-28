@@ -5,7 +5,14 @@ var rec;
 var input;
 
 var AudioContext = window.AudioContext || window.webkitAudioContext;
-var audioContext = new AudioContext({ sampleRate: 16000 });
+var audioContext;
+
+var constraints = { audio: true, video: false }
+navigator.mediaDevices.getUserMedia(constraints).then(function (stream) {
+    audioContext = new AudioContext({ sampleRate: 16000 })
+    gumStream = stream;
+    input = audioContext.createMediaStreamSource(stream);
+}).catch(function (err) { });
 
 var recordBtn = document.getElementById('record');
 
@@ -28,13 +35,8 @@ function handleRecording() {
 }
 
 function startRecording() {
-    var constraints = { audio: true, video: false }
-    navigator.mediaDevices.getUserMedia(constraints).then(function (stream) {
-        gumStream = stream;
-        input = audioContext.createMediaStreamSource(stream);
-        rec = new Recorder(input, { numChannels: 1 });
-        rec.record();
-    }).catch(function (err) { });
+    rec = new Recorder(input, { numChannels: 1 });
+    rec.record();
 }
 
 function stopRecording() {
